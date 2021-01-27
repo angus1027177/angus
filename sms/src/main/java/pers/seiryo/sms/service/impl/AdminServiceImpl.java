@@ -13,7 +13,7 @@ import pers.seiryo.sms.service.AdminService;
 public class AdminServiceImpl implements AdminService{
     @Autowired
     private AdminMapper adminMapper;
-
+    @Override
     public Admin login(LoginForm loginForm){return adminMapper.login(loginForm);}
 
 }

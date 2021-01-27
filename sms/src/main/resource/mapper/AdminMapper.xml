@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pers.seiryo.sms.dao.AdminMapper">
+
+    <!-- 验证登录信息是否正确 -->
+    <select id="login" parameterType="loginform" resultType="pers.seiryo.sms.bean.Admin">
+        SELECT id,
+        name,
+        gender,
+        password,
+        email,
+        telephone,
+        address,
+        portrait_path
+        FROM tb_admin
+        WHERE name = #{username}
+        AND password = #{password}
+    </select>
+</mapper>

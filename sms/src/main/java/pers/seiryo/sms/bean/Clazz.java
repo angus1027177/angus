@@ -78,7 +78,10 @@ public class Clazz {
 
     public Clazz() {
     }
-
+    public Clazz(String name,String grade_name) {
+        this.name = name;
+        this.grade_name = grade_name;
+    }
     public Clazz(Integer id, String name, Integer number, String introducation, String coordinator, String email, String telephone, String grade_name) {
         this.id = id;
         this.name = name;

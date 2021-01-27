@@ -1,8 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
   User: 星砂の羽
-  Date: 2021/1/25
-  Time: 16:23
+  Date: 2021/1/26
+  Time: 20:18
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -14,7 +14,7 @@
 <html>
 <head>
     <meta charset="UTF-8" content="#">
-    <title>教师信息管理页面</title>
+    <title>班级信息管理页面</title>
     <!-- 引入CSS -->
     <link rel="stylesheet" type="text/css"
           href="${pageContext.request.contextPath}/static/easyui/themes/default/easyui.css">
@@ -39,7 +39,7 @@
                 collapsible: false,//是否可折叠
                 fit: true,//自动大小
                 method: "post",
-                url: "getTeacherList?t" + new Date().getTime(),
+                url: "getClazzList?t" + new Date().getTime(),
                 idField: 'id',
                 singleSelect: false,//是否单选
                 rownumbers: true,//行号
@@ -50,13 +50,13 @@
                 columns: [[
                     {field: 'chk', checkbox: true, width: 50},
                     {field: 'id', title: 'ID', width: 50, sortable: true},
-                    {field: 'clazz_name', title: '所属班级', width: 150},
-                    {field: 'name', title: '姓名', width: 150},
-                    {field: 'tno', title: '教师编号', width: 150},
-                    {field: 'gender', title: '性别', width: 50},
+                    {field: 'name', title: '班级名', width: 150},
+                    {field: 'number', title: '班级编号', width: 150},
+                    {field: 'introducation', title: '班级介绍', width: 150},
+                    {field: 'coordinator', title: '负责人', width: 50},
                     {field: 'email', title: '邮箱', width: 150},
                     {field: 'telephone', title: '电话', width: 150},
-                    {field: 'address', title: '住址', width: 150}
+                    {field: 'grade_name', title: '所属年级', width: 150}
                 ]],
                 toolbar: "#toolbar"//工具栏
             });
@@ -104,7 +104,7 @@
                         if (r) {
                             $.ajax({
                                 type: "post",
-                                url: "deleteTeacher?t" + new Date().getTime(),
+                                url: "deleteClazz?t" + new Date().getTime(),
                                 data: {ids: ids},
                                 dataType: 'json',
                                 success: function (data) {
@@ -122,9 +122,9 @@
                 }
             });
 
-            //设置添加教师信息窗口
+            //设置添加班级信息窗口
             $("#addDialog").dialog({
-                title: "添加教师信息窗口",
+                title: "添加班级信息窗口",
                 width: 660,
                 height: 530,
                 iconCls: "icon-house",
@@ -147,7 +147,7 @@
                                 var data = $("#addForm").serialize();//序列化表单信息
                                 $.ajax({
                                     type: "post",
-                                    url: "addTeacher?t" + new Date().getTime(),
+                                    url: "addClazz?t" + new Date().getTime(),
                                     data: data,
                                     dataType: 'json',
                                     success: function (data) {
@@ -168,21 +168,21 @@
                         plain: true,
                         iconCls: 'icon-reload',
                         handler: function () {
-                            $("#add_tno").textbox('setValue', "");
                             $("#add_name").textbox('setValue', "");
-                            $("#add_gender").textbox('setValue', "男");
-                            $("#add_password").textbox('setValue', "");
+                            $("#add_number").textbox('setValue', "");
+                            $("#add_introducation").textbox('setValue', "");
+                            $("#add_coordinator").textbox('setValue', "");
                             $("#add_email").textbox('setValue', "");
                             $("#add_telephone").textbox('setValue', "");
-                            $("#add_address").textbox('setValue', "");
+                            $("#add_grade_name").textbox('setValue', "");
                         }
                     }
                 ]
             });
 
-            //设置编辑教师信息窗口
+            //设置编辑班级信息窗口
             $("#editDialog").dialog({
-                title: "修改教师信息窗口",
+                title: "修改班级信息窗口",
                 width: 660,
                 height: 500,
                 iconCls: "icon-house",
@@ -205,7 +205,7 @@
                                 var data = $("#editForm").serialize();//序列化表单信息
                                 $.ajax({
                                     type: "post",
-                                    url: "editTeacher?t=" + new Date().getTime(),
+                                    url: "editClazz?t=" + new Date().getTime(),
                                     data: data,
                                     dataType: 'json',
                                     success: function (data) {
@@ -231,11 +231,11 @@
                         iconCls: 'icon-reload',
                         handler: function () {
                             $("#edit_name").textbox('setValue', "");
-                            $("#edit_gender").textbox('setValue', "男");
-                            $("#edit_password").textbox('setValue', "");
+                            $("#edit_introducation").textbox('setValue', "");
+                            $("#edit_coordinator").textbox('setValue', "");
                             $("#edit_email").textbox('setValue', "");
                             $("#edit_telephone").textbox('setValue', "");
-                            $("#edit_address").textbox('setValue', "");
+                            $("#edit_grade_name").textbox('setValue', "");
                         }
                     }
                 ],
@@ -243,72 +243,37 @@
                 onBeforeOpen: function () {
                     var selectRow = $("#dataList").datagrid("getSelected");
                     $("#edit_id").val(selectRow.id);//初始化id值,需根据id更新学生信息
-                    $("#edit_tno").textbox('setValue', selectRow.tno);
                     $("#edit_name").textbox('setValue', selectRow.name);
-                    $("#edit_gender").textbox('setValue', selectRow.gender);
-                    $("#edit_password").textbox('setValue', selectRow.password);
+                    $("#edit_number").textbox('setValue', selectRow.number);
+                    $("#edit_introducation").textbox('setValue', selectRow.introducation);
+                    $("#edit_coordinator").textbox('setValue', selectRow.coordinator);
                     $("#edit_email").textbox('setValue', selectRow.email);
                     $("#edit_telephone").textbox('setValue', selectRow.telephone);
-                    $("#edit_address").textbox('setValue', selectRow.address);
+                    $("#edit_grade_name").textbox('setValue', selectRow.grade_name);
                     //通过获取头像路径来显示该学生的头像
-                    $("#edit-portrait").attr('src', selectRow.portrait_path);
+//                    $("#edit-portrait").attr('src', selectRow.portrait_path);
                     //初始化头像路径(已优化:在执行SQL语句时通过判断头像路径是否为空,为空则代表用户并未修改头像)
                     //$("#edit_portrait-path").val(selectRow.portrait_path);
                 }
             });
 
-            //学生与班级名搜索按钮的监听事件(将其值返回给Controller)
+            //班级名与年级名搜索按钮的监听事件(将其值返回给Controller)
             $("#search-btn").click(function () {
                 $('#dataList').datagrid('load', {
-                    studentname: $('#search-teachername').val(),//获取教师名称
-                    clazzname: $('#search-clazzname').combobox('getValue')//获取年级名称
+                    name: $('#search-name').val(),//获取班级名称
+                    gradename: $('#search-gradename').combobox('getValue')//获取年级名称
                 });
-            });
-
-            //添加信息窗口中上传头像的按钮事件
-            $("#add-upload-btn").click(function () {
-                if ($("#choose-portrait").filebox("getValue") === '') {
-                    $.messager.alert("提示", "请选择图片!", "warning");
-                    return;
-                }
-                $("#add-uploadForm").submit();//提交表单
-
-            });
-
-            //修改信息窗口中上传头像的按钮事件
-            $("#edit-upload-btn").click(function () {
-                if ($("#edit-choose-portrait").filebox("getValue") === '') {
-                    $.messager.alert("提示", "请选择图片!", "warning");
-                    return;
-                }
-                $("#edit-uploadForm").submit();
-
             });
 
         });
 
-        //上传头像按钮事件
-        function uploaded() {
-            var data = $(window.frames["photo_target"].document).find("body pre").text();
-            data = JSON.parse(data);//将data装换为JSON对象
-            if (data.success) {
-                $.messager.alert("提示", "图片上传成功!", "info");
-                //切换头像
-                $("#add-portrait").attr("src", data.portrait_path);
-                $("#edit-portrait").attr("src", data.portrait_path);
-                //将头像路径存储到教师信息表单中(利用从用户信息中读取头像路径来显示头像)
-                $("#add_portrait_path").val(data.portrait_path);
-                $("#edit_portrait-path").val(data.portrait_path);
-            } else {
-                $.messager.alert("提示", data.msg, "warning");
-            }
-        }
+
 
     </script>
 </head>
 <body>
 
-<!-- 教师列表信息 -->
+<!-- 班级列表信息 -->
 <table id="dataList" cellspacing="0" cellpadding="0"></table>
 
 <!-- 工具栏 -->
@@ -325,23 +290,23 @@
                                      data-options="iconCls:'icon-some-delete',plain:true">删除</a></div>
     </c:if>
 
-    <!-- 教师,班级名搜索域 -->
+    <!-- 班级名，年级名搜索域 -->
     <div style="margin-left: 10px;">
         <div style="float: left;" class="datagrid-btn-separator"></div>
         <!-- 班级名称下拉框 -->
         <a href="javascript:" class="easyui-linkbutton"
            data-options="iconCls:'icon-class',plain:true">班级名称</a>
-        <select id="search-clazzname" style="width: 155px;" class="easyui-combobox" name="clazzname">
+        <select id="search-name" style="width: 155px;" class="easyui-combobox" name="name">
             <!-- 通过JSTL遍历显示年级信息,clazzList:为Contrller传递的来的,存储着Clazz的List对象 -->
             <option value="">未选择班级</option>
             <c:forEach items="${clazzList}" var="clazz">
                 <option value="${clazz.name}">${clazz.name}</option>
             </c:forEach>
         </select>
-        <!-- 教师姓名搜索框 -->
+        <!-- 年级名搜索框 -->
         <a href="javascript:" class="easyui-linkbutton"
-           data-options="iconCls:'icon-user-teacher',plain:true">教师名称</a>
-        <input id="search-teachername" class="easyui-textbox" name="teachername"/>
+           data-options="iconCls:'icon-user-clazz',plain:true">年级名称</a>
+        <input id="search-gradename" class="easyui-textbox" name="gradename"/>
         <!-- 搜索按钮 -->
         <a id="search-btn" href="javascript:" class="easyui-linkbutton"
            data-options="iconCls:'icon-search',plain:true">搜索</a>
@@ -350,29 +315,14 @@
 
 <!-- 添加信息窗口 -->
 <div id="addDialog" style="padding: 15px 0 0 55px;">
-    <!-- 设置添加头像功能 -->
-    <div style="float: right; margin: 15px 40px 0 0; width: 250px; border: 1px solid #EEF4FF" id="add-photo">
-        <img id="add-portrait" alt="照片" style="max-width: 250px; max-height: 300px;" title="照片"
-             src="${pageContext.request.contextPath}/image/portrait/default_teacher_portrait.png"/>
-        <!-- 设置上传图片按钮 -->
-        <form id="add-uploadForm" method="post" enctype="multipart/form-data" action="uploadPhoto"
-              target="photo_target">
-            <input id="choose-portrait" class="easyui-filebox" name="photo" data-options="prompt:'选择照片'"
-                   style="width:200px;">
-            <input id="add-upload-btn" class="easyui-linkbutton" style="width: 50px; height: 24px;;float:right;"
-                   type="button" value="上传"/>
-        </form>
-    </div>
-    <!-- 教师信息表单 -->
+    <!-- 班级信息表单 -->
     <form id="addForm" method="post" action="#">
         <table id="addTable" style="border-collapse:separate; border-spacing:0 3px;" cellpadding="6">
-            <!-- 存储所上传的头像路径 -->
-            <input id="add_portrait-path" type="hidden" name="portrait_path"/>
             <tr>
                 <td>班级</td>
                 <td colspan="1">
-                    <select id="add_clazz_name" style="width: 200px; height: 30px;" class="easyui-combobox"
-                            name="clazz_name" data-options="required:true, missingMessage:'请选择所属班级哟~'">
+                    <select id="add_name" style="width: 200px; height: 30px;" class="easyui-combobox"
+                            name="name" data-options="required:true, missingMessage:'请选择班级哟~'">
                         <c:forEach items="${clazzList}" var="clazz">
                             <option value="${clazz.name}">${clazz.name}</option>
                         </c:forEach>
@@ -380,35 +330,24 @@
                 </td>
             </tr>
             <tr>
-                <td>姓名</td>
+                <td>介绍</td>
                 <td colspan="1">
-                    <input id="add_name" style="width: 200px; height: 30px;" class="easyui-textbox"
-                           type="text" name="name" data-options="required:true, missingMessage:'请填写姓名哟~'"/>
+                    <input id="add_introducation" style="width: 200px; height: 30px;" class="easyui-textbox"
+                           type="text" name="introducation" data-options="required:true, missingMessage:'请填写介绍哟~'"/>
                 </td>
             </tr>
             <tr>
-                <td>性别</td>
+                <td>负责人</td>
                 <td>
-                    <select id="add_gender" class="easyui-combobox"
-                            data-options="editable: false, panelHeight: 50, width: 60, height: 30,
-                            required:true, missingMessage:'请选择性别哟~'" name="gender">
-                        <option value="男">男</option>
-                        <option value="女">女</option>
-                    </select>
+                    <input id="add_coordinator" style="width: 200px; height: 30px;" class="easyui-textbox"
+                           type="text" name="coordinator" data-options="required:true, missingMessage:'请填写负责人哟~'"/>
                 </td>
             </tr>
             <tr>
-                <td>教师编号</td>
+                <td>班级编号</td>
                 <td colspan="1">
-                    <input id="add_tno" style="width: 200px; height: 30px;" class="easyui-textbox"
-                           type="text" name="tno" data-options="required:true, missingMessage:'请填写编号哟~'"/>
-                </td>
-            </tr>
-            <tr>
-                <td>密码</td>
-                <td colspan="1">
-                    <input id="add_password" style="width: 200px; height: 30px;" class="easyui-textbox"
-                           type="password" name="password" data-options="required:true, missingMessage:'请填写自定义密码哟~'"/>
+                    <input id="add_number" style="width: 200px; height: 30px;" class="easyui-textbox"
+                           type="text" name="number" data-options="required:true, missingMessage:'请填写编号哟~'"/>
                 </td>
             </tr>
             <tr>
@@ -426,10 +365,10 @@
                 </td>
             </tr>
             <tr>
-                <td>住址</td>
-                <td colspan="1"><input id="add_address" style="width: 200px; height: 30px;" class="easyui-textbox"
-                                       type="text" name="address"
-                                       data-options="required:true, missingMessage:'请填写家庭住址哟~'"/>
+                <td>所属年级</td>
+                <td colspan="1"><input id="add_grade_name" style="width: 200px; height: 30px;" class="easyui-textbox"
+                                       type="text" name="grade_name"
+                                       data-options="required:true, missingMessage:'请填写所属年级哟~'"/>
                 </td>
             </tr>
         </table>
@@ -439,31 +378,17 @@
 
 <!-- 修改信息窗口 -->
 <div id="editDialog" style="padding: 20px 0 0 65px">
-    <!-- 设置修改头像功能 -->
-    <div style="float: right; margin: 15px 40px 0 0; width: 250px; border: 1px solid #EEF4FF" id="edit-photo">
-        <img id="edit-portrait" alt="照片" style="max-width: 250px; max-height: 300px;" title="照片"
-             src="${pageContext.request.contextPath}/image/portrait/default_teacher_portrait.png"/>
-        <!-- 设置上传图片按钮 -->
-        <form id="edit-uploadForm" method="post" enctype="multipart/form-data" action="uploadPhoto"
-              target="photo_target">
-            <input id="edit-choose-portrait" class="easyui-filebox" name="photo" data-options="prompt:'选择照片'"
-                   style="width:200px;">
-            <input id="edit-upload-btn" class="easyui-linkbutton" style="width: 50px; height: 24px;;float:right;"
-                   type="button" value="上传"/>
-        </form>
-    </div>
-    <!-- 教师信息表单 -->
+
+    <!-- 班级信息表单 -->
     <form id="editForm" method="post" action="#">
-        <!-- 获取被修改信息的学生id -->
+        <!-- 获取被修改信息的班级id -->
         <input type="hidden" id="edit_id" name="id"/>
         <table id="editTable" style="border-collapse:separate; border-spacing:0 3px;" cellpadding="6">
-            <!-- 存储所上传的头像路径 -->
-            <input id="edit_portrait-path" type="hidden" name="portrait_path"/>
             <tr>
                 <td>班级</td>
                 <td colspan="1">
-                    <select id="edit_clazz_name" style="width: 200px; height: 30px;" class="easyui-combobox"
-                            name="clazz_name">
+                    <select id="edit_name" style="width: 200px; height: 30px;" class="easyui-combobox"
+                            name="name">
                         <c:forEach items="${clazzList}" var="clazz">
                             <option value="${clazz.name}">${clazz.name}</option>
                         </c:forEach>
@@ -471,27 +396,24 @@
                 </td>
             </tr>
             <tr>
-                <td>姓名</td>
+                <td>介绍</td>
                 <td colspan="1">
-                    <input id="edit_name" style="width: 200px; height: 30px;" class="easyui-textbox"
-                           type="text" name="name" data-options="required:true, missingMessage:'请填写姓名哟~'"/>
+                    <input id="edit_introducation" style="width: 200px; height: 30px;" class="easyui-textbox"
+                           type="text" name="introducation" data-options="required:true, missingMessage:'请填写介绍哟~'"/>
                 </td>
             </tr>
             <tr>
-                <td>性别</td>
+                <td>负责人</td>
                 <td>
-                    <select id="edit_gender" class="easyui-combobox"
-                            data-options="editable: false, panelHeight: 50, width: 60, height: 30" name="gender">
-                        <option value="男">男</option>
-                        <option value="女">女</option>
-                    </select>
+                    <input id="edit_coordinator" style="width: 200px; height: 30px;" class="easyui-textbox"
+                           type="text" name="coordinator" data-options="required:true, missingMessage:'请填写负责人哟~'"/>
                 </td>
             </tr>
             <tr>
-                <td>教师编号</td>
+                <td>班级编号</td>
                 <td colspan="1">
                     <!-- 设置为只读 -->
-                    <input id="edit_tno" data-options="readonly: true" style="width: 200px; height: 30px;"
+                    <input id="edit_number" data-options="readonly: true" style="width: 200px; height: 30px;"
                            class="easyui-textbox" type="text"/>
                 </td>
             </tr>
@@ -511,9 +433,9 @@
             </tr>
             <tr>
                 <td>住址</td>
-                <td colspan="1"><input id="edit_address" style="width: 200px; height: 30px;" class="easyui-textbox"
-                                       type="text" name="address"
-                                       data-options="required:true, missingMessage:'请填写家庭住址哟~'"/>
+                <td colspan="1"><input id="edit_grade_name" style="width: 200px; height: 30px;" class="easyui-textbox"
+                                       type="text" name="grade_name"
+                                       data-options="required:true, missingMessage:'请填写所属年级哟~'"/>
                 </td>
             </tr>
         </table>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="pers.seiryo.sms.dao.ClazzMapper">
+    <!-- 获取全部班级信息列表 -->
     <select id="selectAll" parameterType="loginform" resultType="pers.seiryo.sms.bean.Clazz">
         SELECT id,
         name,
@@ -12,4 +13,62 @@
         grade_name
         FROM tb_clazz
     </select>
+
+    <!-- 根据班级名获取指定/全部班级信息列表 -->
+        <select id="selectList" parameterType="clazz" resultType="pers.seiryo.sms.bean.Clazz">
+        SELECT id,name,number,introducation,coordinator,email,telephone,grade_name
+        FROM tb_clazz
+        <where>
+            <if test="name!=null and name!=''">
+                AND name = #{name}
+            </if>
+            <if test="grade_name!=null and grade_name!=''">
+                AND name LIKE concat(concat('%',#{grade_name}),'%')
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据班级编号查询指定教师信息 -->
+    <select id="findByNum" resultType="clazz" parameterType="pers.seiryo.sms.bean.Clazz">
+         SELECT id,
+        name,
+        number,
+        introducation,
+        coordinator,
+        email,
+        telephone,
+        grade_name
+        FROM tb_clazz
+        WHERE number = #{number}
+    </select>
+
+    <!-- 添加班级信息 -->
+    <insert id="insert" parameterType="clazz">
+        INSERT INTO tb_clazz(name, number, introducation,coordinator,email, telephone,grade_name)
+        VALUES (#{name},#{number},#{introducation}, #{coordinator}, #{email}, #{telephone},#{grade_name})
+    </insert>
+
+    <!-- 根据id修改指定班级信息 -->
+    <update id="update" parameterType="clazz">
+        UPDATE tb_clazz
+        <set>
+            <if test="name!=null and name!=''">name=#{name},</if>
+            <if test="number!=null and number!=0">number=#{number},</if>
+            <if test="introducation!=null and introducation!=''">introducation=#{introducation},</if>
+            <if test="coordinator!=null and coordinator!=''">coordinator=#{coordinator},</if>
+            <if test="email!=null and email!=''">email=#{email},</if>
+            <if test="telephone!=null and telephone!=''">telephone=#{telephone},</if>
+            <if test="grade_name!=null and grade_name!=''">grade_name=#{grade_name},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <!-- 根据id批量删除指定班级信息 -->
+    <delete id="deleteById">
+        DELETE FROM tb_clazz WHERE id IN
+        <foreach collection="array" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </delete>
 </mapper>

@@ -94,7 +94,10 @@ public class Teacher {
 
     public Teacher() {
     }
-
+    public Teacher( String name,String clazz_name) {
+        this.name = name;
+        this.clazz_name = clazz_name;
+    }
     public Teacher(Integer id, String tno, String name, char gender, String password, String email, String telephone, String address, String portrait_path, String clazz_name) {
         this.id = id;
         this.tno = tno;
